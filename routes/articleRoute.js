@@ -1,7 +1,7 @@
 import express from "express";
 import {
   getArticles, getArticleById, createArticle, updateArticle, deleteArticle
-} from "../controllers/articleController.js";
+} from "../controller/articleController.js";
 
 const router = express.Router();
 
