@@ -1,7 +1,10 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
-
 dotenv.config();
+
+process.env.PG_FORCE_JS = "1"; // <---- tambahkan ini
+
+import db from "../config/database.js";
 
 const db = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
@@ -11,6 +14,5 @@ const db = new Sequelize(process.env.DATABASE_URL, {
       : {},
   logging: false,
 });
-console.log("Database URL:", process.env.DATABASE_URL);
 
 export default db;
