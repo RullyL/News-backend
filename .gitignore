@@ -19,3 +19,4 @@ Thumbs.db
 .env
 
 *.rest
+/generated/prisma

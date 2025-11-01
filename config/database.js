@@ -5,10 +5,12 @@ dotenv.config();
 
 const db = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
-  dialectOptions: process.env.NODE_ENV === "production"
-    ? { ssl: { require: true, rejectUnauthorized: false } }
-    : {},
-  logging: console.log,
+  dialectOptions:
+    process.env.NODE_ENV === "production"
+      ? { ssl: { require: true, rejectUnauthorized: false } }
+      : {},
+  logging: false,
 });
+console.log("Database URL:", process.env.DATABASE_URL);
 
 export default db;
