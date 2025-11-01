@@ -1,26 +1,21 @@
 {
   "name": "news-backend",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "prisma:generate": "npx prisma generate",
-    "postinstall": "npm rebuild pg"
+    "prisma:generate": "npx prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.18.0",
-    "@prisma/extension-accelerate": "^2.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^5.1.0",
-    "pg": "^8.16.3",
-    "pg-hstore": "^2.3.4",
-    "prisma": "^6.18.0",
-    "sequelize": "^6.37.7"
+    "express": "^5.1.0"
   },
   "devDependencies": {
-    "dotenv-cli": "^11.0.0",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "prisma": "^6.18.0"
   }
 }

@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated/prisma-client"
 }
 
 datasource db {
@@ -14,5 +13,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  articles  Article[]
+}
 
+model Article {
+  id          Int       @id @default(autoincrement())
+  title       String
+  slug        String    @unique
+  content     String
+  excerpt     String?
+  imageUrl    String?   @map("image_url")
+  headline    Boolean   @default(false)
+  status      Status    @default(DRAFT)
+  publishedAt DateTime? @map("published_at")
+  category    Category? @relation(fields: [categoryId], references: [id])
+  categoryId  Int?      @map("category_id")
+  author      String
+  authorEmail String?   @map("author_email")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @default(now()) @map("updated_at")
+}
+
+enum Status {
+  DRAFT
+  PUBLISHED
+}
 

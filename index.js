@@ -1,28 +1,20 @@
 import express from "express";
 import cors from "cors";
-import db from "./config/database.js";
-import articleRoute from "./routes/articleRoute.js";
+import dotenv from "dotenv";
 
+import articleRoute from "./routes/articleRoute.js";
+import categoryRoute from "./routes/categoryRoute.js";
+
+dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Test DB connection
-(async () => {
-  try {
-    await db.authenticate();
-    console.log("✅ Database connected!");
-  } catch (error) {
-    console.error("❌ Unable to connect to DB:", error);
-  }
-})();
-
 // Routes
-app.use("/api", articleRoute);
+app.use("/api/articles", articleRoute);
+app.use("/api/categories", categoryRoute);
 
-// Default route
 app.get("/", (req, res) => res.send("Server is running"));
 
-// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,12 +1,11 @@
-import Article from "../models/articleModel.js";
-import Category from "../models/categoryModel.js";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
-// Get all articles
 export const getArticles = async (req, res) => {
   try {
-    const articles = await Article.findAll({
-      include: [{ model: Category, attributes: ["id", "name"] }],
-      order: [["created_at", "DESC"]],
+    const articles = await prisma.article.findMany({
+      include: { category: true },
+      orderBy: { createdAt: "desc" },
     });
     res.json(articles);
   } catch (err) {
@@ -14,11 +13,11 @@ export const getArticles = async (req, res) => {
   }
 };
 
-// Get article by ID
 export const getArticleById = async (req, res) => {
   try {
-    const article = await Article.findByPk(req.params.id, {
-      include: [{ model: Category, attributes: ["id", "name"] }],
+    const article = await prisma.article.findUnique({
+      where: { id: Number(req.params.id) },
+      include: { category: true },
     });
     if (!article) return res.status(404).json({ message: "Article not found" });
     res.json(article);
@@ -27,34 +26,35 @@ export const getArticleById = async (req, res) => {
   }
 };
 
-// Create article
 export const createArticle = async (req, res) => {
   try {
-    const article = await Article.create(req.body);
+    const article = await prisma.article.create({ data: req.body });
     res.status(201).json(article);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 };
 
-// Update article
 export const updateArticle = async (req, res) => {
   try {
-    const article = await Article.findByPk(req.params.id);
-    if (!article) return res.status(404).json({ message: "Article not found" });
-    await article.update(req.body);
+    const id = Number(req.params.id);
+    const exists = await prisma.article.findUnique({ where: { id } });
+    if (!exists) return res.status(404).json({ message: "Article not found" });
+
+    const article = await prisma.article.update({ where: { id }, data: req.body });
     res.json({ message: "Article updated", article });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 };
 
-// Delete article
 export const deleteArticle = async (req, res) => {
   try {
-    const article = await Article.findByPk(req.params.id);
-    if (!article) return res.status(404).json({ message: "Article not found" });
-    await article.destroy();
+    const id = Number(req.params.id);
+    const exists = await prisma.article.findUnique({ where: { id } });
+    if (!exists) return res.status(404).json({ message: "Article not found" });
+
+    await prisma.article.delete({ where: { id } });
     res.json({ message: "Article deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
